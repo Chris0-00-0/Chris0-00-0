@@ -1,4 +1,4 @@
-# you can't eat cats kevin
+# You Can't Eat Cats Kevin
 
 
 <!DOCTYPE html>
@@ -7,30 +7,39 @@
     <title>RULES FOR A NEW WORLD</title>
     <style>
         body {
-            background: #ffffff; /* white background */
+            background-color: #ffffff; /* white background */
             color: #000000; /* black text */
             font-family: monospace;
-            white-space: pre-wrap;
             padding: 20px;
             font-size: 18px;
+            line-height: 1.6;
+        }
+        #text {
+            max-height: 70vh;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
         }
         button {
-            margin: 6px;
-            padding: 8px 16px;
-            background: #add8e6; /* light blue */
-            color: #000000; /* black text on button */
-            border: none;
+            margin: 6px 6px 6px 0;
+            padding: 10px 20px;
+            background-color: #add8e6; /* light blue */
+            color: #000000; /* black text */
+            border: 1px solid #87ceeb;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
         }
         button:hover {
-            background: #87ceeb; /* slightly darker blue on hover */
+            background-color: #87ceeb;
         }
     </style>
 </head>
 <body>
 
-<pre id="text"></pre>
+<div id="text"></div>
 <div id="buttons"></div>
 
 <script>
@@ -41,7 +50,7 @@ const textEl = document.getElementById("text");
 const buttonsEl = document.getElementById("buttons");
 
 function log(msg) {
-    textEl.textContent += msg + "\n";
+    textEl.innerHTML += msg + "<br>";
     textEl.scrollTop = textEl.scrollHeight; // auto-scroll
 }
 
@@ -61,16 +70,16 @@ function status_check() {
         buttonsEl.innerHTML = "";
         return false;
     } else {
-        log("Your country continues forward. Current moral: " + moral + "\n");
+        log("Your country continues forward. Current moral: " + moral + "<br>");
         return true;
     }
 }
 
 function moral_check() {
-    if (moral >= 89) log("Citizens are thrilled\n");
-    else if (moral >= 79) log("Citizens are happy\n");
-    else if (moral >= 69) log("Citizens are ok\n");
-    else if (moral >= 50) log("Citizens are worried\n");
+    if (moral >= 89) log("Citizens are thrilled<br>");
+    else if (moral >= 79) log("Citizens are happy<br>");
+    else if (moral >= 69) log("Citizens are ok<br>");
+    else if (moral >= 50) log("Citizens are worried<br>");
 }
 
 function normal_event() {
