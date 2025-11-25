@@ -7,8 +7,8 @@
     <title>RULES FOR A NEW WORLD</title>
     <style>
         body {
-            background: #000;
-            color: #0f0;
+            background: #ffffff; /* white background */
+            color: #000000; /* black text */
             font-family: monospace;
             white-space: pre-wrap;
             padding: 20px;
@@ -17,13 +17,15 @@
         button {
             margin: 6px;
             padding: 8px 16px;
-            background: #0f0;
-            color: #000;
+            background: #add8e6; /* light blue */
+            color: #000000; /* black text on button */
             border: none;
             cursor: pointer;
             font-size: 16px;
         }
-        button:hover { background: #0c0; }
+        button:hover {
+            background: #87ceeb; /* slightly darker blue on hover */
+        }
     </style>
 </head>
 <body>
@@ -40,6 +42,7 @@ const buttonsEl = document.getElementById("buttons");
 
 function log(msg) {
     textEl.textContent += msg + "\n";
+    textEl.scrollTop = textEl.scrollHeight; // auto-scroll
 }
 
 function showButtons(options) {
