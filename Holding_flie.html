@@ -1,22 +1,53 @@
-print('Welcome to Shoot, Defend, Stand-off.'
-      'This is a game where you will be going'
-      ' up against me.''This you will have three'
-      ' options to pick from shoot, defend, stand-off.' 
-      ' When you shoot and I dont pick defend I will lose'
-      ' health points, if we both shoot, we will both lose'
-      ' health points, if I pick stand-off we only I lose'
-       'health points since im not defending. If you or I'
-      ' pick stand-off and you or I are defending, the'
-      ' person who is stand-off will gain life.')
+import random
 
-actions = (stand_off, defend, shoot)
+print(
+    'Welcome to Shoot, Defend, Stand-off. '
+    'This is a game where you will be going up against me. '
+    'You will have three options to pick from: shoot, defend, stand-off.'
+)
 
-player_life_lose_limit = 0
+actions = ["stand_off", "defend", "shoot"]
 
+# Health values
 player_life = 100
-if player_life == 0:
-    print('You lost the game. Better luck next time. Refresh the page to start again.')
+computer_life = 100
+
+while True:
+
+    # Player chooses
+    player_choice = input("Choose your action: ").lower()
+
+    # Computer randomly chooses AFTER the player chooses
+    computer_choice = random.choice(actions)
+    print("Computer chose:", computer_choice)
+
+    # --------------------------------------------------------
+    #               YOUR GAME LOGIC GOES HERE
+    #   Insert damage, healing, etc. based on both choices.
+    #
+    # Example you will change later:
+    # if player_choice == "shoot" and computer_choice != "defend":
+    #     computer_life -= 20
+    #
+    # if computer_choice == "shoot" and player_choice != "defend":
+    #     player_life -= 20
+    #
+    # --------------------------------------------------------
+
+    # Show current health each round
+    print(f"Your health: {player_life}")
+    print(f"Computer health: {computer_life}")
+
+    # Game over checks
+    if player_life <= 0:
+        print("You lost the game!")
+        break
+
+    if computer_life <= 0:
+        print("You won the game!")
+        break
+   
 
 
-def stand_off
+
 
