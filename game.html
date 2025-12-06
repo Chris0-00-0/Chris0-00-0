@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -13,37 +13,38 @@
     body {
         background-color: #ffffff;
         color: #000000;
-        font-family: "Times New Roman", serif;  /* Main font */
+        font-family: "Times New Roman", serif;  
         padding: 20px;
         font-size: 22px;
         line-height: 1.7;
     }
 
-    h1, a {
+    h1, h2, a {
         color: #000000;
-        font-size: 28px;
     }
 
-    #text {
-        max-height: 60vh;
+    .game-log {
+        max-height: 35vh;
         overflow-y: auto;
         border: 3px solid #000000;
-        padding: 20px;
+        padding: 15px;
         margin-bottom: 25px;
         background-color: #ffffff;
         font-size: 22px;
         line-height: 1.7;
         color: #000000;
+        white-space: pre-wrap;
     }
 
-    #buttons {
+    .game-buttons {
         text-align: center;
-        margin-top: 20px;
+        margin-top: 10px;
+        margin-bottom: 20px;
     }
 
     button {
-        margin: 12px;
-        padding: 16px 28px;
+        margin: 10px;
+        padding: 14px 26px;
         background-color: #000000;
         color: #ffffff;
         border: 3px solid #000000;
@@ -51,28 +52,24 @@
         cursor: pointer;
         font-size: 20px;
         font-weight: bold;
-        min-width: 200px;
-        font-family: "Times New Roman", serif; /* Match page font */
+        min-width: 180px;
+        font-family: "Times New Roman", serif;
     }
 
     button:hover {
         background-color: #444444;
     }
 
-    /* Responsive tweaks for smaller screens */
     @media (max-width: 600px) {
-        body {
-            font-size: 20px;
-        }
-        button {
-            font-size: 18px;
-            padding: 14px 22px;
-            min-width: 160px;
-        }
-        #text {
-            font-size: 20px;
-        }
+        body { font-size: 20px; }
+        button { font-size: 18px; padding: 12px 22px; min-width: 160px; }
+        .game-log { font-size: 20px; }
     }
+
+    .status-box {
+        margin-bottom: 15px;
+    }
+
 </style>
 </head>
 <body>
@@ -80,30 +77,28 @@
 <h1>You Can't Eat Cats Kevin – The Game</h1>
 <a href="index.html">⬅ Back to Home</a>
 
-<!-- GAME TEXT DISPLAY -->
-<div id="text"></div>
-
-<!-- BUTTONS FOR CHOICES -->
-<div id="buttons"></div>
+<!-- ============================
+      ORIGINAL GAME
+============================ -->
+<div id="text" class="game-log"></div>
+<div id="buttons" class="game-buttons"></div>
 
 <script>
-/* ===============================
-   GAME VARIABLES & ELEMENT SETUP
-================================= */
+/* =============================
+   ORIGINAL GAME VARIABLES
+============================= */
 let moral = 100;
 let lose_limit = 50;
 
 const textEl = document.getElementById("text");
 const buttonsEl = document.getElementById("buttons");
 
-/* ===============================
-       BASIC OUTPUT FUNCTIONS
-================================= */
+/* =============================
+   ORIGINAL GAME FUNCTIONS
+============================= */
 function log(msg) {
-    textEl.innerHTML += msg + "<br>";
-    setTimeout(() => {
-        textEl.scrollTop = textEl.scrollHeight;
-    }, 30);
+    textEl.innerHTML += msg + "\n";
+    setTimeout(() => { textEl.scrollTop = textEl.scrollHeight; }, 30);
 }
 
 function showButtons(options) {
@@ -116,9 +111,6 @@ function showButtons(options) {
     });
 }
 
-/* ===============================
-           MORAL SYSTEM
-================================= */
 function status_check() {
     if (moral <= lose_limit) {
         log("Your moral has dropped too low. The citizens start a revolution. You lose the game.");
@@ -129,17 +121,16 @@ function status_check() {
 }
 
 function show_moral() {
-    log("Moral: " + moral + "<br>");
+    log("Moral: " + moral + "\n");
 }
 
 function moral_check() {
-    if (moral >= 89) log("Citizens are thrilled<br>");
-    else if (moral >= 79) log("Citizens are happy<br>");
-    else if (moral >= 69) log("Citizens are ok<br>");
-    else if (moral >= 50) log("Citizens are worried<br>");
+    if (moral >= 89) log("Citizens are thrilled\n");
+    else if (moral >= 79) log("Citizens are happy\n");
+    else if (moral >= 69) log("Citizens are ok\n");
+    else if (moral >= 50) log("Citizens are worried\n");
 }
 
-/* Random normal event */
 function normal_event() {
     let roll = Math.random();
     let split_chance = 0.09;
@@ -162,104 +153,50 @@ function normal_event() {
     }
 }
 
-/* ===============================
-           CHOICE SCENES
-================================= */
 function choice1() {
     log("Will you follow democracy?");
     showButtons([
-        {label: "yes", action: () => {
-            log("You choose to follow democracy.");
-            normal_event();
-            next();
-        }},
-        {label: "no", action: () => {
-            log("You choose not to follow democracy. Moral -20");
-            moral -= 20;
-            next();
-        }}
+        {label: "yes", action: () => { log("You choose to follow democracy."); normal_event(); next(); }},
+        {label: "no", action: () => { log("You choose not to follow democracy. Moral -20"); moral -= 20; next(); }}
     ]);
 }
 
 function choice2() {
     log("Do you choose to focus on education over controlling inflation?");
     showButtons([
-        {label: "yes", action: () => {
-            log("You choose education.");
-            normal_event();
-            next();
-        }},
-        {label: "no", action: () => {
-            log("You choose war and inflation focus. Moral -10");
-            moral -= 10;
-            next();
-        }}
+        {label: "yes", action: () => { log("You choose education."); normal_event(); next(); }},
+        {label: "no", action: () => { log("You choose war and inflation focus. Moral -10"); moral -= 10; next(); }}
     ]);
 }
 
 function choice3() {
     log("Will you focus on terrorism over drugs/crime?");
     showButtons([
-        {label: "yes", action: () => {
-            let change = -1 * (Math.floor(Math.random() * 20) + 1);
-            moral += change;
-            log("Citizens are split. - " + Math.abs(change));
-            next();
-        }},
-        {label: "no", action: () => {
-            let change = -1 * (Math.floor(Math.random() * 20) + 1);
-            moral += change;
-            log("Citizens are split. - " + Math.abs(change));
-            next();
-        }}
+        {label: "yes", action: () => { let change = -1 * (Math.floor(Math.random() * 20) + 1); moral += change; log("Citizens are split. - " + Math.abs(change)); next(); }},
+        {label: "no", action: () => { let change = -1 * (Math.floor(Math.random() * 20) + 1); moral += change; log("Citizens are split. - " + Math.abs(change)); next(); }}
     ]);
 }
 
 function choice4() {
     log("Will you allow the right to bear arms?");
     showButtons([
-        {label: "yes", action: () => {
-            log("You allow the right to bear arms.");
-            if (Math.random() < 0.2) {
-                let penalty = Math.floor(Math.random() * 6) + 3;
-                moral -= penalty;
-                log("Moral dropped by " + penalty);
-            }
-            next();
-        }},
-        {label: "no", action: () => {
-            log("You deny the right to bear arms.");
-            if (Math.random() < 0.2) {
-                let bonus = Math.floor(Math.random() * 6) + 3;
-                moral += bonus;
-                log("Moral increased by " + bonus);
-            }
-            next();
-        }}
+        {label: "yes", action: () => { log("You allow the right to bear arms."); if (Math.random() < 0.2) { let penalty = Math.floor(Math.random() * 6) + 3; moral -= penalty; log("Moral dropped by " + penalty); } next(); }},
+        {label: "no", action: () => { log("You deny the right to bear arms."); if (Math.random() < 0.2) { let bonus = Math.floor(Math.random() * 6) + 3; moral += bonus; log("Moral increased by " + bonus); } next(); }}
     ]);
 }
 
 function choice5() {
     log("What is your stance on the death penalty?");
     showButtons([
-        {label: "anti-death penalty", action: () => {
-            log("You choose to be Anti-death penalty.");
-            normal_event();
-            next();
-        }},
-        {label: "for death penalty", action: () => {
-            log("You support the death penalty.");
-            normal_event();
-            next();
-        }}
+        {label: "anti-death penalty", action: () => { log("You choose to be Anti-death penalty."); normal_event(); next(); }},
+        {label: "for death penalty", action: () => { log("You support the death penalty."); normal_event(); next(); }}
     ]);
 }
 
-/* ===============================
-          GAME FLOW SYSTEM
-================================= */
+/* =============================
+   ORIGINAL GAME FLOW
+============================= */
 let step = 0;
-
 function next() {
     if (!status_check()) return;
 
@@ -272,22 +209,146 @@ function next() {
     else if (step === 3) choice3();
     else if (step === 4) choice4();
     else if (step === 5) choice5();
-    else {
-        log("You have finished the game!");
-        buttonsEl.innerHTML = "";
-    }
+    else { log("You have finished the game!"); buttonsEl.innerHTML = ""; }
 }
 
-/* ===============================
-          GAME INTRO MESSAGE
-================================= */
-log("RULES FOR A NEW WORLD<br>");
-log(
-    "You are the new leader of a rising nation. Your decisions affect the people's moral. " +
-    "If moral reaches 50 or lower, the citizens revolt and you lose.<br><br>"
-);
+/* =============================
+   ORIGINAL GAME INTRO
+============================= */
+log("RULES FOR A NEW WORLD\n");
+log("You are the new leader of a rising nation. Your decisions affect the people's moral. If moral reaches 50 or lower, the citizens revolt and you lose.\n");
+next();
+</script>
 
-next(); // Begin game
+<!-- =============================
+   PROJECT #2 – Shoot, Defend, Stand-off
+============================= -->
+<h2 style="margin-top:30px;">Project #2 — Have fun!</h2>
+
+<div id="shoot-defend-standoff-game" style="margin-top: 10px;">
+    <h2>Shoot, Defend, Stand-off</h2>
+    <p id="sds-intro">
+        Welcome to Shoot, Defend, Stand-off!<br>
+        Here’s what each action does:<br>
+        • <strong>Shoot</strong> — You fire at your opponent using your current power.<br>
+        • <strong>Defend</strong> — You block most of the damage if attacked.<br>
+        • <strong>Stand off</strong> — You take a moment to recover and gather strength.<br>
+    </p>
+
+    <div class="status-box">
+        <p>Your Health: <span id="sds-player-life">100</span></p>
+        <p>Computer Health: <span id="sds-computer-life">100</span></p>
+        <p>Your Power: <span id="sds-player-power">20</span></p>
+        <p>Computer Power: <span id="sds-computer-power">20</span></p>
+    </div>
+
+    <div id="sds-buttons" class="game-buttons"></div>
+    <div id="sds-log" class="game-log"></div>
+</div>
+
+<script>
+/* =============================
+   PROJECT #2 VARIABLES
+============================= */
+let sdsPlayerLife = 100;
+let sdsComputerLife = 100;
+let sdsPlayerPower = 20;
+let sdsComputerPower = 20;
+
+const sdsActions = ["shoot", "defend", "stand off"];
+const sdsButtonsEl = document.getElementById("sds-buttons");
+const sdsLogEl = document.getElementById("sds-log");
+
+/* =============================
+   SMART AI
+============================= */
+function sdsSmartChoice(playerPower, computerPower, playerLife, computerLife) {
+    if (computerPower >= playerLife) return "shoot";
+    if (playerPower >= computerLife) return "defend";
+    if (computerPower < 10) return Math.random() < 0.7 ? "stand off" : "defend";
+    if (computerLife < 30) {
+        const r = Math.random();
+        if (r < 0.6) return "defend";
+        else if (r < 0.85) return "shoot";
+        else return "stand off";
+    }
+    const r = Math.random();
+    if (r < 0.45) return "shoot";
+    else if (r < 0.7) return "defend";
+    else return "stand off";
+}
+
+/* =============================
+   DISPLAY UPDATE
+============================= */
+function sdsUpdateDisplay() {
+    document.getElementById("sds-player-life").textContent = sdsPlayerLife;
+    document.getElementById("sds-computer-life").textContent = sdsComputerLife;
+    document.getElementById("sds-player-power").textContent = sdsPlayerPower;
+    document.getElementById("sds-computer-power").textContent = sdsComputerPower;
+}
+
+/* =============================
+   LOG & BUTTONS
+============================= */
+function sdsLog(msg) {
+    sdsLogEl.innerHTML += msg + "\n";
+    setTimeout(() => { sdsLogEl.scrollTop = sdsLogEl.scrollHeight; }, 30);
+}
+
+function sdsShowButtons() {
+    sdsButtonsEl.innerHTML = "";
+    sdsActions.forEach(action => {
+        const btn = document.createElement("button");
+        btn.textContent = action.charAt(0).toUpperCase() + action.slice(1);
+        btn.onclick = () => sdsPlayerAction(action);
+        sdsButtonsEl.appendChild(btn);
+    });
+}
+
+/* =============================
+   PLAYER ACTION HANDLER
+============================= */
+function sdsPlayerAction(choice) {
+    if (sdsPlayerLife <= 0 || sdsComputerLife <= 0) return;
+
+    const computerChoice = sdsSmartChoice(sdsPlayerPower, sdsComputerPower, sdsPlayerLife, sdsComputerLife);
+    sdsLog("Computer chose: " + computerChoice);
+
+    // Combat resolution
+    if (choice === 'shoot' && computerChoice === 'shoot') {
+        sdsPlayerLife -= sdsComputerPower;
+        sdsComputerLife -= sdsPlayerPower;
+    } else if (choice === 'shoot' && computerChoice === 'defend') {
+        sdsComputerLife -= Math.floor(sdsPlayerPower * 0.05);
+        sdsComputerPower += 5;
+    } else if (choice === 'shoot' && computerChoice === 'stand off') {
+        sdsComputerLife -= sdsPlayerPower;
+    } else if (choice === 'defend' && computerChoice === 'shoot') {
+        sdsPlayerLife -= Math.floor(sdsComputerPower * 0.05);
+        sdsPlayerPower += 5;
+    } else if (choice === 'defend' && computerChoice === 'defend') {} 
+    else if (choice === 'defend' && computerChoice === 'stand off') {
+        sdsComputerLife += 5;
+        sdsComputerPower += 5;
+    } else if (choice === 'stand off' && computerChoice === 'shoot') {
+        sdsPlayerLife -= sdsComputerPower;
+    } else if (choice === 'stand off' && computerChoice === 'defend') {
+        sdsPlayerLife += 5;
+        sdsPlayerPower += 5;
+    } else if (choice === 'stand off' && computerChoice === 'stand off') {}
+
+    sdsUpdateDisplay();
+
+    if (sdsPlayerLife <= 0) { sdsLog("💀 You lost the game!"); sdsButtonsEl.innerHTML = ""; }
+    else if (sdsComputerLife <= 0) { sdsLog("🎉 You won the game!"); sdsButtonsEl.innerHTML = ""; }
+}
+
+/* =============================
+   INITIALIZE PROJECT #2
+============================= */
+sdsUpdateDisplay();
+sdsShowButtons();
 </script>
 
 <!-- ==================================
