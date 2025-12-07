@@ -48,7 +48,6 @@
     }
 
     button:hover { background-color: #444; }
-
 </style>
 </head>
 <body>
@@ -189,7 +188,7 @@ next();
 </script>
 
 <!-- ============================
-      PROJECT #2
+      PROJECT #2 – FIXED + WORKING
 ============================ -->
 <h2 style="margin-top:30px;">Shoot, Defend, Stand-off</h2>
 
@@ -210,7 +209,7 @@ next();
 
 <script>
 /* ============================
-   GAME VARIABLES
+      GAME VARIABLES
 ============================ */
 let sdsPlayerLife = 100;
 let sdsComputerLife = 100;
@@ -243,6 +242,7 @@ function sdsLog(msg) {
     setTimeout(()=>{ sdsLogEl.scrollTop = sdsLogEl.scrollHeight; },30);
 }
 
+/* SHOW BUTTONS */
 function sdsShowButtons() {
     sdsButtonsEl.innerHTML = "";
     sdsActions.forEach(action=>{
@@ -253,9 +253,9 @@ function sdsShowButtons() {
     });
 }
 
-/* ===============================================
+/* ============================
    PIXEL GRAPHICS ENGINE
-================================================ */
+============================ */
 const canvas = document.getElementById("sdsCanvas");
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
@@ -269,6 +269,7 @@ let anim = { playerAction:"idle", enemyAction:"idle" };
 function drawStatusBars(x,y,life,power,label){
     ctx.fillStyle="#000";
     ctx.fillRect(x-50,y-55,100,35);
+
     ctx.fillStyle="#fff";
     ctx.fillRect(x-48,y-53,96,31);
 
@@ -307,6 +308,7 @@ function drawCharacter(x,action,facing){
         ctx.lineWidth=2;
         ctx.strokeRect(-12,-37,24,40);
     }
+
     ctx.restore();
 }
 
@@ -323,38 +325,16 @@ function renderBattle(){
 }
 renderBattle();
 
-function animateAction(playerChoice,enemyChoice){
-    anim.playerAction = playerChoice==="stand off" ? "stand" : playerChoice;
-    anim.enemyAction  = enemyChoice==="stand off" ? "stand" : enemyChoice;
-
-    setTimeout(()=>{
-        anim.playerAction="idle";
-        anim.enemyAction="idle";
-    },500);
-}
-
 /* ===============================================
-    COMBAT
+    COMBAT SYSTEM
 ================================================ */
-const oldPlayerAction = sdsPlayerAction;
-sdsPlayerAction = function(choice){
-    if(sdsPlayerLife<=0 || sdsComputerLife<=0) return;
-
+function sdsPlayerAction(choice){
     const enemyChoice = sdsSmartChoice(
         sdsPlayerPower, sdsComputerPower, 
         sdsPlayerLife, sdsComputerLife
     );
 
     animateAction(choice, enemyChoice);
-
-    oldPlayerAction(choice);
-};
-
-function sdsPlayerAction(choice){
-    const enemyChoice = sdsSmartChoice(
-        sdsPlayerPower, sdsComputerPower, 
-        sdsPlayerLife, sdsComputerLife
-    );
 
     sdsLog("Computer chose: " + enemyChoice);
 
@@ -391,6 +371,20 @@ function sdsPlayerAction(choice){
     else if (sdsComputerLife <= 0) { sdsLog(" You won!"); sdsButtonsEl.innerHTML=""; }
 }
 
+/* ===============================================
+   ANIMATIONS
+================================================ */
+function animateAction(playerChoice,enemyChoice){
+    anim.playerAction = playerChoice==="stand off" ? "stand" : playerChoice;
+    anim.enemyAction  = enemyChoice==="stand off" ? "stand" : enemyChoice;
+
+    setTimeout(()=>{
+        anim.playerAction="idle";
+        anim.enemyAction="idle";
+    },500);
+}
+
+/* START GAME */
 sdsUpdateDisplay();
 sdsShowButtons();
 </script>
