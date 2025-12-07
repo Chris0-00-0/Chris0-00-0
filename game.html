@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>You Can't Eat Cats Kevin - Game</title>
 
-<!-- ================================
-     ULTRA READABLE WHITE THEME 
-     (Updated to Times New Roman)
-=================================== -->
 <style>
     body {
         background-color: #ffffff;
@@ -26,28 +22,23 @@
     .game-log {
         max-height: 35vh;
         overflow-y: auto;
-        border: 3px solid #000000;
+        border: 3px solid #000;
         padding: 15px;
         margin-bottom: 25px;
-        background-color: #ffffff;
+        background: #fff;
         font-size: 22px;
         line-height: 1.7;
-        color: #000000;
         white-space: pre-wrap;
     }
 
-    .game-buttons {
-        text-align: center;
-        margin-top: 10px;
-        margin-bottom: 20px;
-    }
+    .game-buttons { text-align: center; margin-top: 10px; margin-bottom: 20px; }
 
     button {
         margin: 10px;
         padding: 14px 26px;
-        background-color: #000000;
-        color: #ffffff;
-        border: 3px solid #000000;
+        background-color: #000;
+        color: #fff;
+        border: 3px solid #000;
         border-radius: 6px;
         cursor: pointer;
         font-size: 20px;
@@ -56,19 +47,7 @@
         font-family: "Times New Roman", serif;
     }
 
-    button:hover {
-        background-color: #444444;
-    }
-
-    @media (max-width: 600px) {
-        body { font-size: 20px; }
-        button { font-size: 18px; padding: 12px 22px; min-width: 160px; }
-        .game-log { font-size: 20px; }
-    }
-
-    .status-box {
-        margin-bottom: 15px;
-    }
+    button:hover { background-color: #444; }
 
 </style>
 </head>
@@ -84,18 +63,12 @@
 <div id="buttons" class="game-buttons"></div>
 
 <script>
-/* =============================
-   ORIGINAL GAME VARIABLES
-============================= */
 let moral = 100;
 let lose_limit = 50;
 
 const textEl = document.getElementById("text");
 const buttonsEl = document.getElementById("buttons");
 
-/* =============================
-   ORIGINAL GAME FUNCTIONS
-============================= */
 function log(msg) {
     textEl.innerHTML += msg + "\n";
     setTimeout(() => { textEl.scrollTop = textEl.scrollHeight; }, 30);
@@ -120,9 +93,7 @@ function status_check() {
     return true;
 }
 
-function show_moral() {
-    log("Moral: " + moral + "\n");
-}
+function show_moral() { log("Moral: " + moral + "\n"); }
 
 function moral_check() {
     if (moral >= 89) log("Citizens are thrilled\n");
@@ -133,154 +104,133 @@ function moral_check() {
 
 function normal_event() {
     let roll = Math.random();
-    let split_chance = 0.09;
-    let unite_chance = 0.09;
+    let split = 0.09;
+    let unite = 0.09;
 
-    if (roll < split_chance) {
-        log("Citizens are splitting. This will hurt moral.");
+    if (roll < split) {
+        log("Citizens are splitting. This hurts moral.");
         let penalty = Math.floor(Math.random() * 6) + 3;
         moral -= penalty;
         log("Moral dropped by " + penalty);
-    }
-    else if (roll < split_chance + unite_chance) {
+    } else if (roll < split + unite) {
         log("Citizens unite. This improves moral.");
         let bonus = Math.floor(Math.random() * 6) + 3;
         moral += bonus;
         log("Moral increased by " + bonus);
-    }
-    else {
-        log("Citizens calm down. Moral remains the same.");
-    }
+    } else log("Citizens calm down. No change.");
 }
 
 function choice1() {
     log("Will you follow democracy?");
     showButtons([
-        {label: "yes", action: () => { log("You choose to follow democracy."); normal_event(); next(); }},
-        {label: "no", action: () => { log("You choose not to follow democracy. Moral -20"); moral -= 20; next(); }}
+        {label: "yes", action: () => { log("You follow democracy."); normal_event(); next(); }},
+        {label: "no", action: () => { log("You deny democracy. Moral -20"); moral -= 20; next(); }}
     ]);
 }
 
 function choice2() {
-    log("Do you choose to focus on education over controlling inflation?");
+    log("Focus on education over inflation?");
     showButtons([
         {label: "yes", action: () => { log("You choose education."); normal_event(); next(); }},
-        {label: "no", action: () => { log("You choose war and inflation focus. Moral -10"); moral -= 10; next(); }}
+        {label: "no", action: () => { log("You focus on war & inflation. Moral -10"); moral -= 10; next(); }}
     ]);
 }
 
 function choice3() {
-    log("Will you focus on terrorism over drugs/crime?");
+    log("Focus on terrorism instead of drugs/crime?");
     showButtons([
-        {label: "yes", action: () => { let change = -1 * (Math.floor(Math.random() * 20) + 1); moral += change; log("Citizens are split. - " + Math.abs(change)); next(); }},
-        {label: "no", action: () => { let change = -1 * (Math.floor(Math.random() * 20) + 1); moral += change; log("Citizens are split. - " + Math.abs(change)); next(); }}
+        {label: "yes", action: () => { let change = -(Math.floor(Math.random()*20)+1); moral += change; log("Citizens split. " + change); next(); }},
+        {label: "no", action: () => { let change = -(Math.floor(Math.random()*20)+1); moral += change; log("Citizens split. " + change); next(); }}
     ]);
 }
 
 function choice4() {
-    log("Will you allow the right to bear arms?");
+    log("Allow the right to bear arms?");
     showButtons([
-        {label: "yes", action: () => { log("You allow the right to bear arms."); if (Math.random() < 0.2) { let penalty = Math.floor(Math.random() * 6) + 3; moral -= penalty; log("Moral dropped by " + penalty); } next(); }},
-        {label: "no", action: () => { log("You deny the right to bear arms."); if (Math.random() < 0.2) { let bonus = Math.floor(Math.random() * 6) + 3; moral += bonus; log("Moral increased by " + bonus); } next(); }}
+        {label: "yes", action: () => { 
+            log("You allow gun rights.");
+            if (Math.random() < 0.2) { let p = Math.floor(Math.random()*6)+3; moral -= p; log("Moral -" + p); }
+            next(); 
+        }},
+        {label: "no", action: () => {
+            log("You deny gun rights.");
+            if (Math.random() < 0.2) { let p = Math.floor(Math.random()*6)+3; moral += p; log("Moral +" + p); }
+            next();
+        }}
     ]);
 }
 
 function choice5() {
-    log("What is your stance on the death penalty?");
+    log("Your stance on the death penalty?");
     showButtons([
-        {label: "anti-death penalty", action: () => { log("You choose to be Anti-death penalty."); normal_event(); next(); }},
-        {label: "for death penalty", action: () => { log("You support the death penalty."); normal_event(); next(); }}
+        {label:"anti-death", action:()=>{ log("You oppose it."); normal_event(); next(); }},
+        {label:"pro-death",  action:()=>{ log("You support it."); normal_event(); next(); }}
     ]);
 }
 
-/* =============================
-   ORIGINAL GAME FLOW
-============================= */
 let step = 0;
 function next() {
     if (!status_check()) return;
-
     moral_check();
     show_moral();
     step++;
 
-    if (step === 1) choice1();
-    else if (step === 2) choice2();
-    else if (step === 3) choice3();
-    else if (step === 4) choice4();
-    else if (step === 5) choice5();
-    else { log("You have finished the game!"); buttonsEl.innerHTML = ""; }
+    if (step===1) choice1();
+    else if (step===2) choice2();
+    else if (step===3) choice3();
+    else if (step===4) choice4();
+    else if (step===5) choice5();
+    else { log("You finished the game!"); buttonsEl.innerHTML=""; }
 }
 
-/* =============================
-   ORIGINAL GAME INTRO
-============================= */
 log("RULES FOR A NEW WORLD\n");
-log("You are the new leader of a rising nation. Your decisions affect the people's moral. If moral reaches 50 or lower, the citizens revolt and you lose.\n");
+log("You are the new leader. Keep moral above 50.\n");
 next();
 </script>
 
-<!-- =============================
-   PROJECT #2 – Shoot, Defend, Stand-off
-============================= -->
-<h2 style="margin-top:30px;">Project #2 — Have fun!</h2>
+<!-- ============================
+      PROJECT #2
+============================ -->
+<h2 style="margin-top:30px;">Shoot, Defend, Stand-off</h2>
 
-<div id="shoot-defend-standoff-game" style="margin-top: 10px;">
-    <h2>Shoot, Defend, Stand-off</h2>
-    <p id="sds-intro">
-        Welcome to Shoot, Defend, Stand-off!<br>
-        Here’s what each action does:<br>
-        • <strong>Shoot</strong> — You fire at your opponent using your current power.<br>
-        • <strong>Defend</strong> — You block most of the damage if attacked.<br>
-        • <strong>Stand off</strong> — You take a moment to recover and gather strength.<br>
-    </p>
+<canvas id="sdsCanvas" width="600" height="260"
+        style="border:3px solid black; background:#dedede; margin-bottom:15px;
+               image-rendering: pixelated;">
+</canvas>
 
-    <div class="status-box">
-        <p>Your Health: <span id="sds-player-life">100</span></p>
-        <p>Computer Health: <span id="sds-computer-life">100</span></p>
-        <p>Your Power: <span id="sds-player-power">20</span></p>
-        <p>Computer Power: <span id="sds-computer-power">20</span></p>
-    </div>
-
-    <div id="sds-buttons" class="game-buttons"></div>
-    <div id="sds-log" class="game-log"></div>
+<div class="status-box">
+    <p>Your Health: <span id="sds-player-life">100</span></p>
+    <p>Computer Health: <span id="sds-computer-life">100</span></p>
+    <p>Your Power: <span id="sds-player-power">20</span></p>
+    <p>Computer Power: <span id="sds-computer-power">20</span></p>
 </div>
 
+<div id="sds-buttons" class="game-buttons"></div>
+<div id="sds-log" class="game-log"></div>
+
 <script>
-/* =============================
-   PROJECT #2 VARIABLES
-============================= */
+/* ============================
+   GAME VARIABLES
+============================ */
 let sdsPlayerLife = 100;
 let sdsComputerLife = 100;
 let sdsPlayerPower = 20;
 let sdsComputerPower = 20;
 
-const sdsActions = ["shoot", "defend", "stand off"];
+const sdsActions = ["shoot","defend","stand off"];
 const sdsButtonsEl = document.getElementById("sds-buttons");
 const sdsLogEl = document.getElementById("sds-log");
 
-/* =============================
-   SMART AI
-============================= */
+/* SMART AI */
 function sdsSmartChoice(playerPower, computerPower, playerLife, computerLife) {
     if (computerPower >= playerLife) return "shoot";
     if (playerPower >= computerLife) return "defend";
     if (computerPower < 10) return Math.random() < 0.7 ? "stand off" : "defend";
-    if (computerLife < 30) {
-        const r = Math.random();
-        if (r < 0.6) return "defend";
-        else if (r < 0.85) return "shoot";
-        else return "stand off";
-    }
-    const r = Math.random();
-    if (r < 0.45) return "shoot";
-    else if (r < 0.7) return "defend";
-    else return "stand off";
+    if (computerLife < 30) return Math.random() < 0.5 ? "defend" : "shoot";
+    return ["shoot","defend","stand off"][Math.floor(Math.random()*3)];
 }
 
-/* =============================
-   DISPLAY UPDATE
-============================= */
+/* Display update */
 function sdsUpdateDisplay() {
     document.getElementById("sds-player-life").textContent = sdsPlayerLife;
     document.getElementById("sds-computer-life").textContent = sdsComputerLife;
@@ -288,76 +238,162 @@ function sdsUpdateDisplay() {
     document.getElementById("sds-computer-power").textContent = sdsComputerPower;
 }
 
-/* =============================
-   LOG & BUTTONS
-============================= */
 function sdsLog(msg) {
     sdsLogEl.innerHTML += msg + "\n";
-    setTimeout(() => { sdsLogEl.scrollTop = sdsLogEl.scrollHeight; }, 30);
+    setTimeout(()=>{ sdsLogEl.scrollTop = sdsLogEl.scrollHeight; },30);
 }
 
 function sdsShowButtons() {
     sdsButtonsEl.innerHTML = "";
-    sdsActions.forEach(action => {
-        const btn = document.createElement("button");
-        btn.textContent = action.charAt(0).toUpperCase() + action.slice(1);
-        btn.onclick = () => sdsPlayerAction(action);
+    sdsActions.forEach(action=>{
+        const btn=document.createElement("button");
+        btn.textContent = action.toUpperCase();
+        btn.onclick=()=>sdsPlayerAction(action);
         sdsButtonsEl.appendChild(btn);
     });
 }
 
-/* =============================
-   PLAYER ACTION HANDLER
-============================= */
-function sdsPlayerAction(choice) {
-    if (sdsPlayerLife <= 0 || sdsComputerLife <= 0) return;
+/* ===============================================
+   PIXEL GRAPHICS ENGINE
+================================================ */
+const canvas = document.getElementById("sdsCanvas");
+const ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
 
-    const computerChoice = sdsSmartChoice(sdsPlayerPower, sdsComputerPower, sdsPlayerLife, sdsComputerLife);
-    sdsLog("Computer chose: " + computerChoice);
+const playerX = 120;
+const enemyX  = 480;
+const groundY = 190;
 
-    // Combat resolution
-    if (choice === 'shoot' && computerChoice === 'shoot') {
+let anim = { playerAction:"idle", enemyAction:"idle" };
+
+function drawStatusBars(x,y,life,power,label){
+    ctx.fillStyle="#000";
+    ctx.fillRect(x-50,y-55,100,35);
+    ctx.fillStyle="#fff";
+    ctx.fillRect(x-48,y-53,96,31);
+
+    ctx.fillStyle="#000";
+    ctx.font="10px 'Courier New'";
+    ctx.fillText(label,x-45,y-45);
+
+    ctx.fillStyle="#ff4444";
+    ctx.fillRect(x-45,y-40,(life/100)*90,6);
+
+    ctx.fillStyle="#4444ff";
+    ctx.fillRect(x-45,y-30,(power/100)*90,6);
+}
+
+function drawCharacter(x,action,facing){
+    ctx.save();
+    ctx.translate(x,groundY);
+    if(facing==="left") ctx.scale(-1,1);
+
+    ctx.fillStyle="#111";
+    ctx.fillRect(-8,-20,16,20);
+
+    ctx.fillStyle="#222";
+    ctx.fillRect(-6,-33,12,12);
+
+    if(action==="shoot"){
+        ctx.fillStyle="red";
+        ctx.fillRect(10,-15,40,3);
+    }
+    if(action==="defend"){
+        ctx.fillStyle="cyan";
+        ctx.fillRect(8,-22,5,22);
+    }
+    if(action==="stand"){
+        ctx.strokeStyle="lime";
+        ctx.lineWidth=2;
+        ctx.strokeRect(-12,-37,24,40);
+    }
+    ctx.restore();
+}
+
+function renderBattle(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    drawStatusBars(playerX,groundY,sdsPlayerLife,sdsPlayerPower,"PLAYER");
+    drawStatusBars(enemyX,groundY,sdsComputerLife,sdsComputerPower,"ENEMY");
+
+    drawCharacter(playerX,anim.playerAction,"right");
+    drawCharacter(enemyX,anim.enemyAction,"left");
+
+    requestAnimationFrame(renderBattle);
+}
+renderBattle();
+
+function animateAction(playerChoice,enemyChoice){
+    anim.playerAction = playerChoice==="stand off" ? "stand" : playerChoice;
+    anim.enemyAction  = enemyChoice==="stand off" ? "stand" : enemyChoice;
+
+    setTimeout(()=>{
+        anim.playerAction="idle";
+        anim.enemyAction="idle";
+    },500);
+}
+
+/* ===============================================
+    COMBAT
+================================================ */
+const oldPlayerAction = sdsPlayerAction;
+sdsPlayerAction = function(choice){
+    if(sdsPlayerLife<=0 || sdsComputerLife<=0) return;
+
+    const enemyChoice = sdsSmartChoice(
+        sdsPlayerPower, sdsComputerPower, 
+        sdsPlayerLife, sdsComputerLife
+    );
+
+    animateAction(choice, enemyChoice);
+
+    oldPlayerAction(choice);
+};
+
+function sdsPlayerAction(choice){
+    const enemyChoice = sdsSmartChoice(
+        sdsPlayerPower, sdsComputerPower, 
+        sdsPlayerLife, sdsComputerLife
+    );
+
+    sdsLog("Computer chose: " + enemyChoice);
+
+    if (choice === 'shoot' && enemyChoice === 'shoot') {
         sdsPlayerLife -= sdsComputerPower;
         sdsComputerLife -= sdsPlayerPower;
-    } else if (choice === 'shoot' && computerChoice === 'defend') {
-        sdsComputerLife -= Math.floor(sdsPlayerPower * 0.05);
+    }
+    else if (choice === 'shoot' && enemyChoice === 'defend') {
+        sdsComputerLife -= Math.floor(sdsPlayerPower*0.05);
         sdsComputerPower += 5;
-    } else if (choice === 'shoot' && computerChoice === 'stand off') {
+    }
+    else if (choice === 'shoot' && enemyChoice === 'stand off') {
         sdsComputerLife -= sdsPlayerPower;
-    } else if (choice === 'defend' && computerChoice === 'shoot') {
-        sdsPlayerLife -= Math.floor(sdsComputerPower * 0.05);
+    }
+    else if (choice === 'defend' && enemyChoice === 'shoot') {
+        sdsPlayerLife -= Math.floor(sdsComputerPower*0.05);
         sdsPlayerPower += 5;
-    } else if (choice === 'defend' && computerChoice === 'defend') {} 
-    else if (choice === 'defend' && computerChoice === 'stand off') {
+    }
+    else if (choice === 'defend' && enemyChoice === 'stand off') {
         sdsComputerLife += 5;
         sdsComputerPower += 5;
-    } else if (choice === 'stand off' && computerChoice === 'shoot') {
+    }
+    else if (choice === 'stand off' && enemyChoice === 'shoot') {
         sdsPlayerLife -= sdsComputerPower;
-    } else if (choice === 'stand off' && computerChoice === 'defend') {
+    }
+    else if (choice === 'stand off' && enemyChoice === 'defend') {
         sdsPlayerLife += 5;
         sdsPlayerPower += 5;
-    } else if (choice === 'stand off' && computerChoice === 'stand off') {}
+    }
 
     sdsUpdateDisplay();
 
-    if (sdsPlayerLife <= 0) { sdsLog("💀 You lost the game!"); sdsButtonsEl.innerHTML = ""; }
-    else if (sdsComputerLife <= 0) { sdsLog("🎉 You won the game!"); sdsButtonsEl.innerHTML = ""; }
+    if (sdsPlayerLife <= 0) { sdsLog(" You lost!"); sdsButtonsEl.innerHTML=""; }
+    else if (sdsComputerLife <= 0) { sdsLog(" You won!"); sdsButtonsEl.innerHTML=""; }
 }
 
-/* =============================
-   INITIALIZE PROJECT #2
-============================= */
 sdsUpdateDisplay();
 sdsShowButtons();
 </script>
-
-<!-- ==================================
-     FOOTER (PROJECT STATUS)
-==================================== -->
-<p style="margin-top:40px; font-size:20px; color:#333;">
-    <em>rules to a new world project was sadly scrapped due to complications.</em><br>
-    <em>New project in development.</em>
-</p>
 
 </body>
 </html>
